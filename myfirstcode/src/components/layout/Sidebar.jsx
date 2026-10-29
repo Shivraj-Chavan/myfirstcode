@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import logo from "../../assets/myfirstcode_logo.jpg";
 
 export default function Sidebar({ items, roleLabel }) {
   return (
@@ -6,7 +7,7 @@ export default function Sidebar({ items, roleLabel }) {
       <div className="flex items-center gap-2.5 px-6 py-6">
       <div className="grid h-8 w-8 place-items-center">
   <img
-    src="src/assets/myfirstcode_logo.jpg"
+    src={logo}
     alt="Logo"
     className="h-full w-full object-contain"
   />

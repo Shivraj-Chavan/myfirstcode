@@ -1,5 +1,6 @@
 
 
+import logo from "../../assets/myfirstcode_logo.jpg";
 const LINES = [
   { p: "npm create student", c: "text-mint" },
   { p: "Welcome, future engineer 👋", c: "text-white/70" },
@@ -18,7 +19,7 @@ export default function AuthShell({ children, eyebrow, title, subtitle }) {
         <div className="relative flex items-center gap-2.5">
         <div className="grid h-10 w-12 place-items-center">
   <img
-    src="src/assets/myfirstcode_logo.jpg"
+    src={logo}
     alt="Logo"
     className="h-full w-full object-contain"
   />
@@ -58,7 +59,7 @@ export default function AuthShell({ children, eyebrow, title, subtitle }) {
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
           <div className="grid h-8 w-8 place-items-center">
   <img
-    src="src/assets/myfirstcode_logo.jpg"
+    src={logo}
     alt="Logo"
     className="h-full w-full object-contain"
   />

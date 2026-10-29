@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import logo from "../assets/myfirstcode_logo.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import {
  Menu, X, ChevronDown, Building2, ArrowRight,
@@ -71,7 +72,7 @@ export default function Landing() {
 
 <div className="grid h-10 w-12 place-items-center">
   <img
-    src="src/assets/myfirstcode_logo.jpg"
+    src={logo}
     alt="Logo"
     className="h-full w-full object-contain"
   />
@@ -106,7 +107,7 @@ export default function Landing() {
                   >
                   <div className="grid h-10 w-12 place-items-center">
   <img
-    src="src/assets/myfirstcode_logo.jpg"
+    src={logo}
     alt="Logo"
     className="h-full w-full object-contain"
   />
@@ -314,7 +315,7 @@ export default function Landing() {
             <div className="flex items-center gap-2.5">
             <div className="grid h-10 w-12 place-items-center">
   <img
-    src="src/assets/myfirstcode_logo.jpg"
+    src={logo}
     alt="Logo"
     className="h-full w-full object-contain"
   />

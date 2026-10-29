@@ -1,0 +1,5 @@
+my-first-code-api/node_modules
+myfirstcode/node_modules
+dist
+.env
+logs

@@ -60,7 +60,6 @@ setStep("otp");
 
   return (
     <AuthShell
-      eyebrow="auth/login"
       title={step === "email" ? "Welcome back" : "Enter the code"}
       subtitle={step === "email" ? "Log in to pick up right where you left off." : `We sent a login code to ${email}.`}
     >

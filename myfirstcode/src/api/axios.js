@@ -4,7 +4,7 @@ import axios from "axios";
 //   baseURL: import.meta.env.VITE_API_URL || "http://69.62.84.113:5010/api",
 // });
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://69.62.84.113:5010/api",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     // Prevent the browser from serving cached/304 responses for API
     // calls — list endpoints like referral partners/students need to

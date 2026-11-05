@@ -15,7 +15,7 @@ router.post("/register", register);
 router.post("/verify-otp", verifyOtp);
 
 router.post("/login", login); // OTP login — disabled
-// router.post("/google-login", googleLogin);
+router.post("/google-login", googleLogin);
 
 // ================= TEACHERS =================
 

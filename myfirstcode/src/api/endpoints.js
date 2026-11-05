@@ -5,7 +5,8 @@ export const ENDPOINTS = {
   // ---------------- AUTH ----------------
   register: "/auth/register",
   verifyOtp: "/auth/verify-otp",
-  login: "/auth/login",
+  login: "/auth/login", // OTP login — disabled
+  googleLogin: "/auth/google-login",
   teachers: "/auth/teachers", // GET list (admin)
   approveTeacher: (id) => `/auth/approve-teacher/${id}`, // PUT
   deleteTeacher: (id) => `/auth/delete-teacher/${id}`, // DELETE

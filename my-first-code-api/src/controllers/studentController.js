@@ -466,70 +466,70 @@ export const getStudentFullProgress =
 
     // ASSIGNMENTS
 
+     // Assignments/quizzes are saved against the LOGIN account (users.id),
+    // not the students-table row, so bridge the two by email.
+    const [loginRows] = await pool.query(
+      `SELECT id FROM users WHERE email = ? AND role = 'student' LIMIT 1`,
+      [student[0]?.email]
+    );
+    const userId = loginRows[0]?.id;
+
     let assignments = [];
+    let quizzes = [];
 
-    try {
-
-      const [result] = await pool.query(
-        `
+    if (userId) {
+      // ASSIGNMENTS — one row per assignment attempted
+      [assignments] = await pool.query(`
         SELECT
+          a.id AS assignment_id,
           a.title,
-          s.marks,
-          s.submitted_at
+          a.marks AS total_marks,
+          MAX(s.score) AS best_score,
+          COUNT(s.id) AS attempts,
+          MAX(s.created_at) AS last_attempt
 
         FROM assignment_submissions s
 
         LEFT JOIN assignments a
-        ON s.assignment_id = a.id
+        ON a.id = s.assignment_id
 
-        WHERE s.student_id=?
-        `,
-        [id]
-      );
+        WHERE s.student_id = ?
 
-      assignments = result;
+        GROUP BY a.id, a.title, a.marks
+        ORDER BY last_attempt DESC
+      `, [userId]);
 
-    } catch (err) {
-
-      console.log(
-        "ASSIGNMENTS ERROR:",
-        err.message
-      );
-    }
-
-    // QUIZZES
-
-    let quizzes = [];
-
-    try {
-
-      const [result] = await pool.query(
-        `
+      // QUIZZES — results live in quiz_results
+      [quizzes] = await pool.query(`
         SELECT
+          q.id AS quiz_id,
           q.title,
-          qa.marks,
-          qa.status,
-          qa.attempted_at
+          MAX(qr.score) AS best_score,
+          MAX(qr.total_marks) AS total_marks,
+          MAX(qr.percentage) AS best_percentage,
+          COUNT(qr.id) AS attempts
 
-        FROM quiz_attempts qa
+        FROM quiz_results qr
 
         LEFT JOIN quizzes q
-        ON qa.quiz_id = q.id
+        ON q.id = qr.quiz_id
 
-        WHERE qa.student_id=?
-        `,
-        [id]
-      );
+        WHERE qr.student_id = ?
 
-      quizzes = result;
-
-    } catch (err) {
-
-      console.log(
-        "QUIZ ERROR:",
-        err.message
-      );
+        GROUP BY q.id, q.title
+        ORDER BY MAX(qr.id) DESC
+      `, [userId]);
     }
+
+    res.status(200).json({
+      success: true,
+      student: student[0],
+      noLoginAccount: !userId,
+      levelsCompleted: levels.length,
+      levels,
+      assignments,
+      quizzes,
+    });
 
     res.status(200).json({
       success: true,

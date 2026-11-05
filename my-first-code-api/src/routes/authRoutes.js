@@ -1,6 +1,11 @@
 import express from "express";
-import { approveTeacher, createTeacher, deleteTeacher, getTeachers, login, register, verifyOtp } from "../controllers/authController.js";
 
+// google login
+// import { approveTeacher, createTeacher, deleteTeacher, getTeachers, googleLogin, register, verifyOtp } from "../controllers/authController.js";
+
+
+// otp login
+import { approveTeacher, createTeacher, deleteTeacher, getTeachers, googleLogin, login, register, verifyOtp } from "../controllers/authController.js";
 const router = express.Router();
 
 // ================= AUTH =================
@@ -9,7 +14,8 @@ router.post("/register", register);
 
 router.post("/verify-otp", verifyOtp);
 
-router.post("/login", login);
+router.post("/login", login); // OTP login — disabled
+// router.post("/google-login", googleLogin);
 
 // ================= TEACHERS =================
 

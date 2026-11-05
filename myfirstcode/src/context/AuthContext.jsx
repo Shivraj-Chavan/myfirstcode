@@ -52,6 +52,19 @@ const [user, setUser] = useState(() => {
     return user;
   }, []);
 
+  const googleLogin = useCallback(async (credential) => {
+    const { data } = await api.post(ENDPOINTS.googleLogin, { credential });
+
+    if (!data?.token || !data?.user) {
+      throw new Error("Google login response is missing token or user.");
+    }
+
+    localStorage.setItem("mfc_token", data.token);
+    localStorage.setItem("mfc_user", JSON.stringify(data.user));
+    setUser(data.user);
+    return data.user;
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem("mfc_token");
     localStorage.removeItem("mfc_user");
@@ -60,7 +73,7 @@ const [user, setUser] = useState(() => {
   }, [navigate]);
 
   return (
-    <AuthContext.Provider value={{ user, requestLoginOtp, verifyLoginOtp, logout, setUser }}>
+    <AuthContext.Provider value={{ user, requestLoginOtp, verifyLoginOtp, googleLogin, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );

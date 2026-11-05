@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Clock3 } from "lucide-react";
 import AuthShell from "./AuthShell.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { GoogleLogin } from "@react-oauth/google";
+
+/* ================= OTP LOGIN (DISABLED — replaced by Google login) =================
 
 export default function Login() {
   const { requestLoginOtp, verifyLoginOtp } = useAuth();
@@ -132,3 +135,137 @@ setStep("otp");
     </AuthShell>
   );
 }
+
+// ================= END OTP LOGIN =================
+
+// ================= GOOGLE LOGIN (DISABLED) =================
+
+export default function Login() {
+  const { googleLogin } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSuccess = async (cred) => {
+    setError("");
+    setPending(false);
+    setLoading(true);
+    try {
+      const user = await googleLogin(cred.credential);
+      if (user.role === "admin") navigate("/admin");
+      else if (user.role === "teacher") navigate("/teacher");
+      else navigate("/student");
+    } catch (err) {
+      if (err?.response?.status === 403) setPending(true);
+      setError(
+        err?.response?.data?.message ||
+          err.message ||
+          "Google sign-in failed. Try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <AuthShell eyebrow="auth/login" title="Welcome back" subtitle="Sign in with the Google account you registered with.">
+      <div className="space-y-4">
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleSuccess}
+            onError={() => setError("Google sign-in was cancelled or failed.")}
+            theme="outline"
+            size="large"
+            width="320"
+          />
+        </div>
+
+        {loading && <p className="text-center text-xs text-slate-muted">Signing you in...</p>}
+
+        {error && !pending && (
+          <p className="rounded-lg bg-coral-light px-3.5 py-2.5 text-xs font-medium text-coral-dark">{error}</p>
+        )}
+        {pending && (
+          <div className="flex items-start gap-2.5 rounded-lg bg-amber-light px-3.5 py-3 text-xs font-medium text-amber-dark">
+            <Clock3 size={16} className="mt-0.5 shrink-0" />
+            <span>Your teacher account is waiting on admin approval. You'll be able to log in as soon as it's approved.</span>
+          </div>
+        )}
+      </div>
+
+      <p className="mt-6 text-center text-sm text-slate-muted">
+        New here?{" "}
+        <Link to="/register" className="font-semibold text-brand hover:underline">
+          Create an account
+        </Link>
+      </p>
+    </AuthShell>
+  );
+}
+  ================= END GOOGLE LOGIN ================= */
+
+
+  export default function Login() {
+    const { googleLogin } = useAuth();
+    const navigate = useNavigate();
+    const [error, setError] = useState("");
+    const [pending, setPending] = useState(false);
+    const [loading, setLoading] = useState(false);
+  
+    const handleSuccess = async (cred) => {
+      setError("");
+      setPending(false);
+      setLoading(true);
+      try {
+        const user = await googleLogin(cred.credential);
+        if (user.role === "admin") navigate("/admin");
+        else if (user.role === "teacher") navigate("/teacher");
+        else navigate("/student");
+      } catch (err) {
+        if (err?.response?.status === 403) setPending(true);
+        setError(
+          err?.response?.data?.message ||
+            err.message ||
+            "Google sign-in failed. Try again."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    return (
+      <AuthShell eyebrow="auth/login" title="Welcome back" subtitle="Sign in with the Google account you registered with.">
+        <div className="space-y-4">
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={handleSuccess}
+              onError={() => setError("Google sign-in was cancelled or failed.")}
+              theme="outline"
+              size="large"
+              width="320"
+            />
+          </div>
+  
+          {loading && <p className="text-center text-xs text-slate-muted">Signing you in...</p>}
+  
+          {error && !pending && (
+            <p className="rounded-lg bg-coral-light px-3.5 py-2.5 text-xs font-medium text-coral-dark">{error}</p>
+          )}
+          {pending && (
+            <div className="flex items-start gap-2.5 rounded-lg bg-amber-light px-3.5 py-3 text-xs font-medium text-amber-dark">
+              <Clock3 size={16} className="mt-0.5 shrink-0" />
+              <span>Your teacher account is waiting on admin approval. You'll be able to log in as soon as it's approved.</span>
+            </div>
+          )}
+        </div>
+  
+        <p className="mt-6 text-center text-sm text-slate-muted">
+          New here?{" "}
+          <Link to="/register" className="font-semibold text-brand hover:underline">
+            Create an account
+          </Link>
+        </p>
+      </AuthShell>
+    );
+  }
